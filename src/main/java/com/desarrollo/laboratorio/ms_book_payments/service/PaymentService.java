@@ -7,7 +7,10 @@ import com.desarrollo.laboratorio.ms_book_payments.model.entities.Payment;
 import com.desarrollo.laboratorio.ms_book_payments.repository.OrderRepository;
 import com.desarrollo.laboratorio.ms_book_payments.repository.PaymentRepository;
 import jakarta.ws.rs.NotFoundException;
+import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,10 +40,11 @@ public class PaymentService {
         return optPayment.get();
     }
 
-    public Payment createPayment(PaymentDTO paymentDto) {
+    public ResponseEntity<Payment> createPayment(PaymentDTO paymentDto) {
         boolean existsAllBooks = booksFacade.booksAreValid(paymentDto.getOrders());
+
         if (!existsAllBooks)
-            return null;
+            return ResponseEntity.notFound().build();
 
         Payment paymentEntity = new Payment();
         paymentEntity.setAmount(paymentDto.getAmount());
@@ -52,7 +56,11 @@ public class PaymentService {
             orderRepository.save(order);
         }
 
-        return paymentEntity;
+        return ResponseEntity.ok(paymentEntity);
 
+    }
+
+    public void delete(Long id) {
+        paymentRepository.deleteById(id);
     }
 }

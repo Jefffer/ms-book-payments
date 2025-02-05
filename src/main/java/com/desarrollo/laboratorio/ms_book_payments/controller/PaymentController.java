@@ -6,6 +6,7 @@ import com.desarrollo.laboratorio.ms_book_payments.model.entities.Order;
 import com.desarrollo.laboratorio.ms_book_payments.model.entities.Payment;
 import com.desarrollo.laboratorio.ms_book_payments.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping()
-    public Payment createPayment(@RequestBody PaymentDTO payment) {
+    public ResponseEntity<Payment> createPayment(@RequestBody PaymentDTO payment) {
         if(!isValid(payment))
             return null;
         return paymentService.createPayment(payment);
@@ -42,7 +43,12 @@ public class PaymentController {
     }
 
     @DeleteMapping()
-    public void deletePayment(@PathVariable Long id){}
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id){
+        if(id==null)
+            return null;
+        paymentService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
     private boolean isValid(PaymentDTO paymentDTO){
 
