@@ -26,8 +26,6 @@ public class PaymentController {
         if(!isValid(payment))
             return null;
         return paymentService.createPayment(payment);
-
-
     }
 
     @GetMapping()

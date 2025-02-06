@@ -1,5 +1,6 @@
 package com.desarrollo.laboratorio.ms_book_payments.service;
 
+import com.desarrollo.laboratorio.ms_book_payments.exception.BookException;
 import com.desarrollo.laboratorio.ms_book_payments.model.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,23 +30,16 @@ public class BooksFacade {
     public boolean booksAreValid(List<OrderDTO> orderDTO) {
         try{
             HttpEntity<List<OrderDTO>> request = new HttpEntity<>(orderDTO);
-            ResponseEntity<Boolean> response = restTemplate.exchange(
+            ResponseEntity<String> response = restTemplate.exchange(
                     catalogueUrl+"/books/update-stock",
                     HttpMethod.POST,
                     request,
-                    Boolean.class);
+                    String.class);
 
-            return response.getBody() != null && response.getBody();
+            return response.getStatusCode().is2xxSuccessful();
 
-        }catch (HttpClientErrorException e) {
-            log.error("Client Error: {}", e.getStatusCode());
-            return false;
-        } catch (HttpServerErrorException e) {
-            log.error("Server Error: {}", e.getStatusCode());
-            return false;
         } catch (Exception e) {
-            log.error("Error: {}", e.getMessage());
-            return false;
+            throw new BookException("No se ha podido realizar el pedido");
         }
 
     }

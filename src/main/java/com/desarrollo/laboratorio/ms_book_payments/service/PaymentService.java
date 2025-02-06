@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,11 +50,14 @@ public class PaymentService {
         Payment paymentEntity = new Payment();
         paymentEntity.setAmount(paymentDto.getAmount());
         paymentEntity.setUserEmail(paymentDto.getUserEmail());
+        paymentEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         paymentEntity = paymentRepository.save(paymentEntity);
-
+        paymentEntity.setOrders(new ArrayList<>());
         for(OrderDTO orderDto: paymentDto.getOrders()){
             Order order = new Order(orderDto.getBookId(), orderDto.getQuantity(), paymentEntity);
-            orderRepository.save(order);
+            order = orderRepository.save(order);
+
+            paymentEntity.getOrders().add(order);
         }
 
         return ResponseEntity.ok(paymentEntity);

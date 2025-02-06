@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +26,9 @@ public class Payment {
 
     private Double amount;
 
-    @OneToMany(mappedBy = "payment")
+    private Timestamp createdAt;
+
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
 
