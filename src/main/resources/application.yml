@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8081
 spring:
   application:
     name: ms-book-payments
@@ -21,3 +21,7 @@ eureka:
   instance:
     preferIpAddress: true
     hostname: ms-book-payments
+
+api:
+  url:
+    ms-book-catalogue: lb://ms-book-catalogue/
