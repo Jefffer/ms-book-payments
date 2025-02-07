@@ -8,7 +8,6 @@ import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(
@@ -28,7 +27,9 @@ public class Payment {
 
     private Timestamp createdAt;
 
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "payment",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Order> orders;
 
 

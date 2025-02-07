@@ -31,7 +31,7 @@ public class BooksFacade {
         try{
             HttpEntity<List<OrderDTO>> request = new HttpEntity<>(orderDTO);
             ResponseEntity<String> response = restTemplate.exchange(
-                    catalogueUrl+"/books/update-stock",
+                    catalogueUrl+"/books/stock",
                     HttpMethod.POST,
                     request,
                     String.class);
